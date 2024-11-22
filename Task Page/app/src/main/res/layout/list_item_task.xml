@@ -1,0 +1,36 @@
+<!-- res/layout/list_item_task.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corners"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:paddingBottom="8dp">
+
+    <TextView
+        android:id="@+id/taskName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="9"
+        android:fontFamily="@font/productsans"
+        android:text="Task Name"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/taskDeadline"
+        style="@style/Widget.AppCompat.TextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="5"
+        android:fontFamily="@font/productsans"
+        android:text="Deadline"
+        android:textSize="16sp" />
+
+    <CheckBox
+        android:id="@+id/taskComplete"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center"
+        android:layout_weight="1" />
+
+</LinearLayout>
