@@ -1,5 +1,6 @@
 package com.example.taskpage2
 
+
 import android.app.AlertDialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Build
+import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +28,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.Locale
+//import com.example.taskpage2
 
 data class Task(val name: String, val deadline: String, var isComplete: Boolean)
 
@@ -108,6 +111,8 @@ class MainActivity : AppCompatActivity() {
 
         // Set the actions of navigation buttons
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.selectedItemId = R.id.navigation_task
+
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_task -> {
@@ -117,6 +122,12 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.navigation_browser -> {
                     openBrowser("https://moodle.hku.hk/")
+                    true
+                }
+
+                R.id.navigation_profile -> {
+                    val intent = Intent(this, Profile::class.java)
+                    startActivity(intent)
                     true
                 }
 
