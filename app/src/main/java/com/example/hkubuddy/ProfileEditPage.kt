@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 
-// TODO: Let this page change the content of profile
 class ProfileEditPage : AppCompatActivity() {
     private val PICK_IMAGE = 1
 //    private val TAKE_PHOTO = 2
