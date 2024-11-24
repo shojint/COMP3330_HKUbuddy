@@ -54,10 +54,11 @@
     <TimePicker
         android:id="@+id/timePicker"
         style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:timePickerMode="spinner"
-        android:fontFamily="@font/productsans"/>
+        android:layout_width="280dp"
+        android:layout_height="165dp"
+        android:layout_gravity="center"
+        android:fontFamily="@font/productsans"
+        android:timePickerMode="spinner" />
 
     <LinearLayout
         style="?android:attr/buttonBarButtonStyle"

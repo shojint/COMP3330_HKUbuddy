@@ -9,22 +9,24 @@
 
     <Button
         android:id="@+id/btn_file"
-        android:layout_width="132dp"
-        android:layout_height="58dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="choose file"
-        android:textSize="16dp"
+        android:textSize="16sp"
+        android:fontFamily="@font/productsans"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_help" />
 
     <Button
         android:id="@+id/btn_brows"
-        android:layout_width="149dp"
-        android:layout_height="59dp"
-        android:layout_marginTop="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
         android:text="Open Browser"
+        android:textSize="16sp"
+        android:fontFamily="@font/productsans"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
@@ -33,20 +35,20 @@
     <Button
         android:id="@+id/btn_help"
         android:layout_width="wrap_content"
-        android:layout_height="47dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="tutorial"
-        android:textSize="13dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        android:textSize="16sp"
+        android:fontFamily="@font/productsans"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_brows" />
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="297dp"
         android:layout_height="277dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
