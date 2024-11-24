@@ -173,7 +173,7 @@ class TaskPage : AppCompatActivity() {
     }
 
     private fun deleteTask(task: Task) {
-        val deletedRows = dbHelper.deleteTask(task.id)
+        val deletedRows = dbHelper.deleteTask(this, task.id)
         if (deletedRows > 0) {
             taskList.remove(task)
             taskAdapter.notifyDataSetChanged()

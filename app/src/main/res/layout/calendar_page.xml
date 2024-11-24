@@ -19,12 +19,21 @@
         android:fontFamily="@font/productsans"
         android:textSize="25sp" />
     <!-- tools:context=".MainActivity" -->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="10dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toTopOf="@id/calendarView"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <!-- CalendarView -->
     <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="50dp"/>
@@ -38,6 +47,7 @@
         android:padding="8dp"
         android:text="Tasks for Selected Date"
         android:textSize="18sp"
+        android:fontFamily="@font/productsans"
         app:layout_constraintTop_toBottomOf="@id/calendarView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -49,6 +59,7 @@
         android:layout_height="wrap_content"
         android:text="Import .ics File"
         android:layout_marginTop="8dp"
+        android:fontFamily="@font/productsans"
         app:layout_constraintTop_toBottomOf="@id/selectedDate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
