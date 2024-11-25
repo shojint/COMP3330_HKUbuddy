@@ -14,9 +14,11 @@ class ProfilePage : AppCompatActivity() {
     private lateinit var nameText: TextView
     private lateinit var tasksCompletedText: TextView
     private lateinit var editProfileButton: Button
-    private var profileImageUri: Uri? = null
     private lateinit var profileImageView: ImageView
+
+    private var profileImageUri: Uri? = null
     private var dbHelper: DatabaseHelper? = DatabaseHelper(this)
+    private var profiledb: ProfileDatabase = ProfileDatabase(this)
     private val EDIT_PROFILE_REQUEST = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +31,11 @@ class ProfilePage : AppCompatActivity() {
         editProfileButton = findViewById(R.id.edit_profile_button)
         profileImageView = findViewById(R.id.profile_picture)
 
+        // Set the initial value of username, user icon and the number of completed task
+        if (profiledb.getUsername() == "")  nameText.text = "User" else nameText.text = profiledb.getUsername()
+        if (profiledb.getUserImage() == null) profileImageView.setImageURI(profiledb.getUserImage()) else profileImageView.setImageResource(R.drawable.blank_profile)
+        tasksCompletedText.text = "${dbHelper?.getCompletedTask()} Task(s) completed"
+
         editProfileButton.setOnClickListener {
             val intent = Intent(this, ProfileEditPage::class.java).apply {
                 putExtra("name", nameText.text.toString())
@@ -36,15 +43,14 @@ class ProfilePage : AppCompatActivity() {
             }
             startActivityForResult(intent, EDIT_PROFILE_REQUEST)
         }
-
-        // Set the initial value of completed tasks
-        tasksCompletedText.text = "${dbHelper?.getCompletedTask()} Task(s) completed"
     }
 
     override fun onResume() {
         super.onResume()
         // Refresh the completed tasks count whenever the page is visible
         tasksCompletedText.text = "${dbHelper?.getCompletedTask()} Task(s) completed"
+        if (profiledb.getUsername() == "")  nameText.text = getString(R.string.user) else nameText.text = profiledb.getUsername()
+        if (profiledb.getUserImage() == null) profileImageView.setImageURI(profiledb.getUserImage()) else profileImageView.setImageResource(R.drawable.blank_profile)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -59,6 +65,7 @@ class ProfilePage : AppCompatActivity() {
                 profileImageUri = Uri.parse(it)
                 profileImageView.setImageURI(profileImageUri)
             }
+            profiledb.updateEntry(updatedName, profileImageUri)
         }
     }
 
