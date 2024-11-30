@@ -83,7 +83,7 @@ class ProfileDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         cursor.use {
             if (it.moveToFirst()){
                 val uriString = it.getString(0)
-                image = if (uriString.isNullOrEmpty()) Uri.parse(uriString) else null
+                image = if (!uriString.isNullOrEmpty()) Uri.parse(uriString) else null
             }
         }
         db.close()
