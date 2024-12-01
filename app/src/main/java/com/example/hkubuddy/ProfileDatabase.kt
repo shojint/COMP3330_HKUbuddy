@@ -6,8 +6,13 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.net.Uri
+import android.content.ContentResolver
+import android.graphics.BitmapFactory
+import android.provider.MediaStore
+import android.util.Log
 
 class ProfileDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+
 
     companion object{
         const val DATABASE_VERSION = 1
@@ -15,6 +20,7 @@ class ProfileDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         private const val PROFILE_TABLE = "Profile"
         private const val KEY_USERNAME = "User"
         private const val KEY_IMAGE = "Image"
+//        private const val KEY_IMAGE = "Image BLOB"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -29,12 +35,29 @@ class ProfileDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         onCreate(db)
     }
 
+
     @Throws(SQLiteException::class)
-    fun updateEntry(name: String?, image: Uri?) {
+    fun updateEntry(context: Context,name: String?, image: Uri?) {
+        Log.d("Name", "Name: " + name + ", Image: " + image.toString());
+
         val db = this.writableDatabase
         val cv = ContentValues()
         cv.put(KEY_USERNAME, name)
-        cv.put(KEY_IMAGE, image?.toString())
+
+//        // Put Image URI to cv
+//        cv.put(KEY_IMAGE, image?.toString())
+
+        // Convert image URI to byte array
+        image?.let {
+            val inputStream = context.contentResolver.openInputStream(it)
+            val byteArray = inputStream?.readBytes()
+            cv.put(KEY_IMAGE, byteArray)
+        }
+
+        for (key in cv.keySet()) {
+            val value = cv.get(key)
+            Log.d("Name", "$key: $value")
+        }
 
         // Try to update existing record
         val rowsAffected = db.update(PROFILE_TABLE, cv, null, null)
@@ -75,18 +98,46 @@ class ProfileDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         return username
     }
 
-    fun getUserImage(): Uri? {
+    fun getUserImage(context: Context): Uri? {
         val db = this.readableDatabase
         val query = "SELECT $KEY_IMAGE FROM $PROFILE_TABLE"
         val cursor = db.rawQuery(query, null)
-        var image: Uri? = null
+        var imageUri: Uri? = null
         cursor.use {
             if (it.moveToFirst()){
-                val uriString = it.getString(0)
-                image = if (!uriString.isNullOrEmpty()) Uri.parse(uriString) else null
+//                val uriString = it.getString(0)
+//                imageUri = if (!uriString.isNullOrEmpty()) Uri.parse(uriString) else null
+
+//
+                val blob = it.getBlob(0)
+
+                if (blob != null) {
+//                    if (it.moveToFirst()){
+//                        val uriString = it.getString(0)
+//                        imageUri = if (!uriString.isNullOrEmpty()) Uri.parse(uriString) else null
+//                    }
+
+                      // Convert byte array back to Bitmap and then to URI
+                    val bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.size)
+                    val path = MediaStore.Images.Media.insertImage(
+                        context.contentResolver,
+                        bitmap,
+                        "Profile Image",
+                        null
+                    )
+                    if (path != null) {
+                        imageUri = Uri.parse(path)
+                    }
+
+                    Log.d("Image","imageUri: " + imageUri.toString())
+
+                } else {
+                    // Handle the case where the BLOB is null
+                    Log.e("ProfileDatabase", "No image found in the database.")
+                }
             }
         }
         db.close()
-        return image
+        return imageUri
     }
 }

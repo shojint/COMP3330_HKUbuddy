@@ -33,7 +33,12 @@ class ProfilePage : AppCompatActivity() {
 
         // Set the initial value of username, user icon and the number of completed task
         if (profiledb.getUsername() == "")  nameText.text = "User" else nameText.text = profiledb.getUsername()
-        if (profiledb.getUserImage() == null) profileImageView.setImageURI(profiledb.getUserImage()) else profileImageView.setImageResource(R.drawable.blank_profile)
+        profileImageUri = profiledb.getUserImage(this)
+
+        if (profileImageUri == null) {
+            profileImageView.setImageURI(profiledb.getUserImage(this))
+        } else profileImageView.setImageResource(R.drawable.blank_profile)
+
         tasksCompletedText.text = "${dbHelper?.getCompletedTask()} Task(s) completed"
 
         editProfileButton.setOnClickListener {
@@ -50,7 +55,23 @@ class ProfilePage : AppCompatActivity() {
         // Refresh the completed tasks count whenever the page is visible
         tasksCompletedText.text = "${dbHelper?.getCompletedTask()} Task(s) completed"
         if (profiledb.getUsername() == "")  nameText.text = getString(R.string.user) else nameText.text = profiledb.getUsername()
-        if (profiledb.getUserImage() == null) profileImageView.setImageURI(profiledb.getUserImage()) else profileImageView.setImageResource(R.drawable.blank_profile)
+
+        profileImageUri = profiledb.getUserImage(this)
+        if (profileImageUri == null) {
+            profileImageView.setImageResource(R.drawable.blank_profile)
+        } else {
+            profileImageView.setImageURI(profiledb.getUserImage(this))
+        }
+
+//        editProfileButton.setOnClickListener {
+//            val intent = Intent(this, ProfileEditPage::class.java).apply {
+//                putExtra("name", nameText.text.toString())
+//                putExtra("image_uri", profileImageUri)
+//            }
+//            startActivityForResult(intent, EDIT_PROFILE_REQUEST)
+//        }
+
+//        if (profiledb.getUserImage(this) == null) profileImageView.setImageURI(profiledb.getUserImage(this)) else profileImageView.setImageResource(R.drawable.blank_profile)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -65,7 +86,7 @@ class ProfilePage : AppCompatActivity() {
                 profileImageUri = Uri.parse(it)
                 profileImageView.setImageURI(profileImageUri)
             }
-            profiledb.updateEntry(updatedName, profileImageUri)
+            profiledb.updateEntry(this, updatedName, profileImageUri)
         }
     }
 

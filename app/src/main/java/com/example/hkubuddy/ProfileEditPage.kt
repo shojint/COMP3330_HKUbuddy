@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -34,8 +35,11 @@ class ProfileEditPage : AppCompatActivity() {
         val intent = intent
         val currentName = intent.getStringExtra("name")
 //        val currentTasks = intent.getIntExtra("tasks", 0)
+
+
         imageUri = intent.getStringExtra("image_uri")?.let { Uri.parse(it) }
 
+//        Log.d("uri", imageUri.toString())
         // Set existing values
         nameEdit.setText(currentName)
 //        tasksEdit.setText(currentTasks.toString())
