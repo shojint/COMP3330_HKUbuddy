@@ -23,12 +23,12 @@ data class Task(
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
-        private const val DATABASE_VERSION = 1 // Keep version as 1
+        private const val DATABASE_VERSION = 1
         private const val DATABASE_NAME = "TaskDB"
         private const val TABLE_TASKS = "tasks"
         private const val KEY_ID = "id"
         private const val KEY_NAME = "name"
-        private const val KEY_DESCRIPTION = "description" // New field
+        private const val KEY_DESCRIPTION = "description"
         private const val KEY_DEADLINE = "deadline"
         private const val KEY_IS_COMPLETE = "is_complete"
     }
@@ -155,7 +155,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         val result = db.delete(TABLE_TASKS, "$KEY_ID = ?", arrayOf(taskId.toString()))
         db.close()
 
-        // Cancel the notification for the deleted task
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, ReminderReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
@@ -170,15 +169,11 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     fun scheduleNotification(context: Context, task: Task) {
-        // Define a formatter to parse the task's deadline
         val dateFormatter = java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd")
 
         try {
-            // Parse the task deadline using the defined formatter
             val taskDeadline = LocalDate.parse(task.deadline, dateFormatter)
             val reminderDate = taskDeadline.minusDays(5) // Set reminder 5 days before deadline
-
-            // Convert reminder date to milliseconds
             val reminderTimeInMillis = reminderDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
             if (reminderTimeInMillis < System.currentTimeMillis()) {
@@ -205,7 +200,6 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
                 pendingIntent
             )
         } catch (e: Exception) {
-            // Log an error if the date cannot be parsed
             Log.e("scheduleNotification", "Failed to parse date: ${task.deadline}", e)
         }
     }
@@ -214,7 +208,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     fun scheduleNotificationsForAllTasks(context: Context) {
         val allTasks = getAllTasks()
         for (task in allTasks) {
-            if (!task.isComplete) { // Schedule only for incomplete tasks
+            if (!task.isComplete) {
                 scheduleNotification(context, task)
             }
         }

@@ -74,8 +74,6 @@ class CalendarPage : AppCompatActivity() {
 
     private fun displayTasksForDate(date: String) {
         val tasks = dbHelper.getTasksForDate(date)
-
-        // Log the tasks for debugging
         Log.d("CalendarPage", "Tasks for date $date: ${tasks.size}")
         tasks.forEach { task ->
             Log.d("CalendarPage", "Task: ${task.name}")

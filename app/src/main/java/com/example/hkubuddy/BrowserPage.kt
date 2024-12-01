@@ -73,20 +73,24 @@ class BrowserPage : AppCompatActivity() {
                     finish()
                     true
                 }
+
                 R.id.navigation_task -> {
                     startActivity(Intent(this, TaskPage::class.java))
                     finish()
                     true
                 }
+
                 R.id.navigation_browser -> {
                     webView.loadUrl("https://moodle.hku.hk/")
                     true
                 }
+
                 R.id.navigation_profile -> {
                     startActivity(Intent(this, ProfilePage::class.java))
                     finish()
                     true
                 }
+
                 else -> false
             }
         }
@@ -118,15 +122,18 @@ class BrowserPage : AppCompatActivity() {
                     startActivity(Intent(this, CalendarPage::class.java))
                     true
                 }
+
                 R.id.navigation_task -> {
                     startActivity(Intent(this, TaskPage::class.java))
                     true
                 }
+
                 R.id.navigation_browser -> true
                 R.id.navigation_profile -> {
                     startActivity(Intent(this, ProfilePage::class.java))
                     true
                 }
+
                 else -> false
             }
         }
