@@ -23,7 +23,7 @@
         android:id="@+id/refreshNotificationsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Refresh Notification"
+        android:text="Refresh Reminders"
         android:layout_marginEnd="10dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

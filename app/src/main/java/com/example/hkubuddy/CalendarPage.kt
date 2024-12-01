@@ -74,16 +74,18 @@ class CalendarPage : AppCompatActivity() {
 
     private fun displayTasksForDate(date: String) {
         val tasks = dbHelper.getTasksForDate(date)
+
+        // Log the tasks for debugging
         Log.d("CalendarPage", "Tasks for date $date: ${tasks.size}")
         tasks.forEach { task ->
             Log.d("CalendarPage", "Task: ${task.name}")
         }
+
         adapter.updateEvents(tasks)
     }
 
-    private fun refreshNotifications() {
+        private fun refreshNotifications() {
         try {
-            // Schedule notifications for all tasks in the database
             dbHelper.scheduleNotificationsForAllTasks(this)
             Toast.makeText(this, "Notifications refreshed for all tasks.", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {

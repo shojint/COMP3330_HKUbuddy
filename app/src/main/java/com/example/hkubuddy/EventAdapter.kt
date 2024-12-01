@@ -11,13 +11,14 @@ class EventAdapter(private val events: MutableList<Task>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(android.R.layout.simple_list_item_1, parent, false)
+            .inflate(R.layout.item_task, parent, false) // Use custom layout
         return EventViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val task = events[position]
-        holder.textView.text = task.name // Display only the task name
+        holder.taskName.text = task.name
+        holder.taskDescription.text = task.description
     }
 
     override fun getItemCount() = events.size
@@ -29,7 +30,7 @@ class EventAdapter(private val events: MutableList<Task>) :
     }
 
     class EventViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textView: TextView = itemView.findViewById(android.R.id.text1)
+        val taskName: TextView = itemView.findViewById(R.id.taskName)
+        val taskDescription: TextView = itemView.findViewById(R.id.taskDescription)
     }
 }
-

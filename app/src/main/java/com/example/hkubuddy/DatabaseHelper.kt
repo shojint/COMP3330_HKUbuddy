@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.content.ContentValues
 import android.content.Intent
+import android.provider.Settings
 import android.util.Log
 import java.time.LocalDate
 import java.time.ZoneId
@@ -169,36 +170,46 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
     }
 
     fun scheduleNotification(context: Context, task: Task) {
-        val taskDeadline = LocalDate.parse(task.deadline)
-        val reminderDate = taskDeadline.minusDays(5) // Set reminder 5 days before deadline
+        // Define a formatter to parse the task's deadline
+        val dateFormatter = java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd")
 
-        // Convert reminder date to milliseconds
-        val reminderTimeInMillis = reminderDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+        try {
+            // Parse the task deadline using the defined formatter
+            val taskDeadline = LocalDate.parse(task.deadline, dateFormatter)
+            val reminderDate = taskDeadline.minusDays(5) // Set reminder 5 days before deadline
 
-        if (reminderTimeInMillis < System.currentTimeMillis()) {
-            // Skip scheduling if the reminder time has already passed
-            return
+            // Convert reminder date to milliseconds
+            val reminderTimeInMillis = reminderDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+
+            if (reminderTimeInMillis < System.currentTimeMillis()) {
+                // Skip scheduling if the reminder time has already passed
+                return
+            }
+
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val intent = Intent(context, ReminderReceiver::class.java).apply {
+                putExtra("task_name", task.name)
+                putExtra("task_deadline", task.deadline)
+            }
+
+            val pendingIntent = PendingIntent.getBroadcast(
+                context,
+                task.id.hashCode(),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                reminderTimeInMillis,
+                pendingIntent
+            )
+        } catch (e: Exception) {
+            // Log an error if the date cannot be parsed
+            Log.e("scheduleNotification", "Failed to parse date: ${task.deadline}", e)
         }
-
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, ReminderReceiver::class.java).apply {
-            putExtra("task_name", task.name)
-            putExtra("task_deadline", task.deadline)
-        }
-
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            task.id.hashCode(),
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            reminderTimeInMillis,
-            pendingIntent
-        )
     }
+
 
     fun scheduleNotificationsForAllTasks(context: Context) {
         val allTasks = getAllTasks()
