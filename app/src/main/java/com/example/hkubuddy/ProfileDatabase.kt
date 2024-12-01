@@ -11,10 +11,11 @@ import android.graphics.BitmapFactory
 import android.provider.MediaStore
 import android.util.Log
 
-class ProfileDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class ProfileDatabase(context: Context) :
+    SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
 
-    companion object{
+    companion object {
         const val DATABASE_VERSION = 1
         const val DATABASE_NAME = "ProfileDB"
         private const val PROFILE_TABLE = "Profile"
@@ -24,7 +25,7 @@ class ProfileDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val createTable = ("CREATE TABLE " + PROFILE_TABLE + " ("+
+        val createTable = ("CREATE TABLE " + PROFILE_TABLE + " (" +
                 KEY_USERNAME + " TEXT," +
                 KEY_IMAGE + " TEXT)")
         db?.execSQL(createTable)
@@ -37,7 +38,7 @@ class ProfileDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 
 
     @Throws(SQLiteException::class)
-    fun updateEntry(context: Context,name: String?, image: Uri?) {
+    fun updateEntry(context: Context, name: String?, image: Uri?) {
         Log.d("Name", "Name: " + name + ", Image: " + image.toString());
 
         val db = this.writableDatabase
@@ -104,7 +105,7 @@ class ProfileDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
         val cursor = db.rawQuery(query, null)
         var imageUri: Uri? = null
         cursor.use {
-            if (it.moveToFirst()){
+            if (it.moveToFirst()) {
 //                val uriString = it.getString(0)
 //                imageUri = if (!uriString.isNullOrEmpty()) Uri.parse(uriString) else null
 
@@ -117,7 +118,7 @@ class ProfileDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
 //                        imageUri = if (!uriString.isNullOrEmpty()) Uri.parse(uriString) else null
 //                    }
 
-                      // Convert byte array back to Bitmap and then to URI
+                    // Convert byte array back to Bitmap and then to URI
                     val bitmap = BitmapFactory.decodeByteArray(blob, 0, blob.size)
                     val path = MediaStore.Images.Media.insertImage(
                         context.contentResolver,
@@ -129,7 +130,7 @@ class ProfileDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAM
                         imageUri = Uri.parse(path)
                     }
 
-                    Log.d("Image","imageUri: " + imageUri.toString())
+                    Log.d("Image", "imageUri: " + imageUri.toString())
 
                 } else {
                     // Handle the case where the BLOB is null

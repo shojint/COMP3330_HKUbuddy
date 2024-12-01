@@ -85,9 +85,14 @@ class CalendarPage : AppCompatActivity() {
     private fun refreshNotifications() {
         try {
             dbHelper.scheduleNotificationsForAllTasks(this)
-            Toast.makeText(this, "Notifications refreshed for all tasks.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Notifications refreshed for all tasks.", Toast.LENGTH_SHORT)
+                .show()
         } catch (e: Exception) {
-            Toast.makeText(this, "Failed to refresh notifications: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "Failed to refresh notifications: ${e.message}",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -120,16 +125,19 @@ class CalendarPage : AppCompatActivity() {
                     finish()
                     true
                 }
+
                 R.id.navigation_browser -> {
                     startActivity(Intent(this, BrowserPage::class.java))
                     finish()
                     true
                 }
+
                 R.id.navigation_profile -> {
                     startActivity(Intent(this, ProfilePage::class.java))
                     finish()
                     true
                 }
+
                 else -> false
             }
         }

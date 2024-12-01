@@ -32,7 +32,8 @@ class ProfilePage : AppCompatActivity() {
         profileImageView = findViewById(R.id.profile_picture)
 
         // Set the initial value of username, user icon and the number of completed task
-        if (profiledb.getUsername() == "")  nameText.text = "User" else nameText.text = profiledb.getUsername()
+        if (profiledb.getUsername() == "") nameText.text = "User" else nameText.text =
+            profiledb.getUsername()
         profileImageUri = profiledb.getUserImage(this)
 
         if (profileImageUri == null) {
@@ -54,7 +55,8 @@ class ProfilePage : AppCompatActivity() {
         super.onResume()
         // Refresh the completed tasks count whenever the page is visible
         tasksCompletedText.text = "${dbHelper?.getCompletedTask()} Task(s) completed"
-        if (profiledb.getUsername() == "")  nameText.text = getString(R.string.user) else nameText.text = profiledb.getUsername()
+        if (profiledb.getUsername() == "") nameText.text =
+            getString(R.string.user) else nameText.text = profiledb.getUsername()
 
         profileImageUri = profiledb.getUserImage(this)
         if (profileImageUri == null) {
@@ -109,16 +111,19 @@ class ProfilePage : AppCompatActivity() {
                     finish()
                     true
                 }
+
                 R.id.navigation_task -> {
                     startActivity(Intent(this, TaskPage::class.java))
                     finish()
                     true
                 }
+
                 R.id.navigation_browser -> {
                     startActivity(Intent(this, BrowserPage::class.java))
                     finish()
                     true
                 }
+
                 R.id.navigation_profile -> true
                 else -> false
             }

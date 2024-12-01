@@ -33,6 +33,7 @@ class TaskPage : AppCompatActivity() {
         super.finish()
         overridePendingTransition(R.anim.no_animation, R.anim.no_animation)
     }
+
     override fun startActivity(intent: Intent, options: Bundle?) {
         super.startActivity(intent, options)
         overridePendingTransition(R.anim.no_animation, R.anim.no_animation)
@@ -45,7 +46,7 @@ class TaskPage : AppCompatActivity() {
         dbHelper = DatabaseHelper(this)
 
         val taskRecyclerView = findViewById<RecyclerView>(R.id.taskRecyclerView)
-        val taskAdapter = TaskAdapter(this, taskList){ task ->
+        val taskAdapter = TaskAdapter(this, taskList) { task ->
             deleteTask(task)
         }
         taskRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -64,7 +65,8 @@ class TaskPage : AppCompatActivity() {
             val alertDialog = dialogBuilder.show()
 
             val taskNameEditText = dialogView.findViewById<EditText>(R.id.taskNameEditText)
-            val taskDescriptionEditText = dialogView.findViewById<EditText>(R.id.taskDescriptionEditText)
+            val taskDescriptionEditText =
+                dialogView.findViewById<EditText>(R.id.taskDescriptionEditText)
             val calendarView = dialogView.findViewById<CalendarView>(R.id.popupCalendarView)
             val timePicker = dialogView.findViewById<TimePicker>(R.id.timePicker)
             val cancelButton = dialogView.findViewById<Button>(R.id.cancelButton)
@@ -137,17 +139,20 @@ class TaskPage : AppCompatActivity() {
                     finish()
                     true
                 }
+
                 R.id.navigation_task -> true // We're already here
                 R.id.navigation_browser -> {
                     startActivity(Intent(this, BrowserPage::class.java))
                     finish()
                     true
                 }
+
                 R.id.navigation_profile -> {
                     startActivity(Intent(this, ProfilePage::class.java))
                     finish()
                     true
                 }
+
                 else -> false
             }
         }

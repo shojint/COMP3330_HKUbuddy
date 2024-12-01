@@ -31,16 +31,20 @@ class StartPage : AppCompatActivity() {
                     Toast.makeText(this, "Events Imported Successfully", Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
                     Log.e("StartPage", "Error handling file", e)
-                    Toast.makeText(this, "Failed to import events: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Failed to import events: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
-        if (dbHelper.getTaskCount() > 0){
+        if (dbHelper.getTaskCount() > 0) {
             dbHelper.scheduleNotificationsForAllTasks(this)
             startActivity(Intent(this, CalendarPage::class.java))
             finish()
             return
-        }else{
+        } else {
             setContentView((R.layout.start_page))
 
             help_btn = findViewById(R.id.btn_help)

@@ -40,7 +40,8 @@ object ICSParser {
                                 }
                                 // Extract event start date and format it
                                 trimmedLine.startsWith("DTSTART:") -> {
-                                    deadline = formatDate(trimmedLine.removePrefix("DTSTART:").trim())
+                                    deadline =
+                                        formatDate(trimmedLine.removePrefix("DTSTART:").trim())
                                 }
                                 // When reaching the end of an event, insert it into the database
                                 trimmedLine.startsWith("END:VEVENT") -> {
@@ -66,7 +67,7 @@ object ICSParser {
                         }
                     }
                 }
-            }else{
+            } else {
                 Log.e("ICSParser", "Error reading .ics file")
             }
         } catch (e: Exception) {
