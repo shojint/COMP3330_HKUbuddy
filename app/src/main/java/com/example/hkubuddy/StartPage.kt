@@ -36,6 +36,7 @@ class StartPage : AppCompatActivity() {
             }
         }
         if (dbHelper.getTaskCount() > 0){
+            dbHelper.scheduleNotificationsForAllTasks(this)
             startActivity(Intent(this, CalendarPage::class.java))
             finish()
             return
