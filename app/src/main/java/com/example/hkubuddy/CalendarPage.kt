@@ -1,7 +1,6 @@
 package com.example.hkubuddy
 
 import android.content.Intent
-import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -20,6 +19,7 @@ class CalendarPage : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: EventAdapter
     private lateinit var dbHelper: DatabaseHelper
+    private lateinit var refreshNotificationsButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +28,7 @@ class CalendarPage : AppCompatActivity() {
         calendarView = findViewById(R.id.calendarView)
         selectedDateText = findViewById(R.id.selectedDate)
         recyclerView = findViewById(R.id.recyclerView)
+        refreshNotificationsButton = findViewById(R.id.refreshNotificationsButton)
         val importButton: Button = findViewById(R.id.importButton)
 
         dbHelper = DatabaseHelper(this)
@@ -40,6 +41,10 @@ class CalendarPage : AppCompatActivity() {
             val selectedDate = "$year/${month + 1}/$dayOfMonth"
             selectedDateText.text = "Tasks for $selectedDate"
             displayTasksForDate(selectedDate)
+        }
+
+        refreshNotificationsButton.setOnClickListener {
+            refreshNotifications()
         }
 
         importButton.setOnClickListener {
@@ -69,13 +74,24 @@ class CalendarPage : AppCompatActivity() {
 
     private fun displayTasksForDate(date: String) {
         val tasks = dbHelper.getTasksForDate(date)
+
+        // Log the tasks for debugging
         Log.d("CalendarPage", "Tasks for date $date: ${tasks.size}")
         tasks.forEach { task ->
             Log.d("CalendarPage", "Task: ${task.name}")
         }
+
         adapter.updateEvents(tasks)
     }
 
+    private fun refreshNotifications() {
+        try {
+            dbHelper.scheduleNotificationsForAllTasks(this)
+            Toast.makeText(this, "Notifications refreshed for all tasks.", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            Toast.makeText(this, "Failed to refresh notifications: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onDestroy() {
         dbHelper.close()
@@ -90,6 +106,7 @@ class CalendarPage : AppCompatActivity() {
         super.finish()
         overridePendingTransition(R.anim.no_animation, R.anim.no_animation)
     }
+
     override fun startActivity(intent: Intent, options: Bundle?) {
         super.startActivity(intent, options)
         overridePendingTransition(R.anim.no_animation, R.anim.no_animation)
